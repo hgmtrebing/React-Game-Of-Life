@@ -1,0 +1,3 @@
+
+- Adding package-lock.json to GIT:
+    - https://stackoverflow.com/questions/44206782/do-i-commit-the-package-lock-json-file-created-by-npm-5
