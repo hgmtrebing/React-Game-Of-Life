@@ -2,10 +2,10 @@
   "name": "react-game-of-life",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/server.js",
+  "main": "bin/server.js",
   "scripts": {
     "typescript-compile": "tsc",
-    "start": "node dist/server.js",
+    "start": "node bin/server.js",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

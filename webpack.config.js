@@ -1,7 +1,7 @@
 const path = require('path');
 module.exports = {
     mode: 'development',
-    entry: './src/main.tsx',
+    entry: './src/ui/main.tsx',
     devtool: 'inline-source-map',
     output: {
         path: path.join(__dirname, '/dist'),
