@@ -1,3 +1,17 @@
 
 - Adding package-lock.json to GIT:
     - https://stackoverflow.com/questions/44206782/do-i-commit-the-package-lock-json-file-created-by-npm-5
+
+- Using Typescript and Express:
+    - https://developer.okta.com/blog/2018/11/15/node-express-typescript
+
+- TypeScript React Components:
+    - https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/class_components/
+
+- Webpack Configuration:
+    - https://webpack.js.org/configuration/
+
+- Using Typescript, React, and Webpack:
+    - https://medium.com/@abuduabiodunsulaiman/setup-react-app-with-webpack-ts-and-js-da80cf3b7278
+
+    
