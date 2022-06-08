@@ -17,3 +17,9 @@
 - HTML Canvas Tutorial
     - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 
+- Initializing React State
+    - https://daveceddia.com/where-initialize-state-react/
+
+- Accessing DOM Elements in REACT
+    - https://stackoverflow.com/questions/38093760/how-to-access-a-dom-element-in-react-what-is-the-equilvalent-of-document-getele
+

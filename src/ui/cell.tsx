@@ -10,6 +10,7 @@ type CellState = {
 }
 
 export class GolCell extends React.Component<CellProps, CellState> {
+
     state: CellState = {
         live: false,
     }

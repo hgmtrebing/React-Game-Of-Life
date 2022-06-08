@@ -14,7 +14,7 @@ class App extends React.Component<AppProps, AppState>{
     render() {
         return (
             <div id={"app"}>
-                <GolBoard width={400} height={400} cellSize={10}/>
+                <GolBoard width={25} height={25} cellSize={20} cellBorder={5}/>
             </div>
         );
     }
