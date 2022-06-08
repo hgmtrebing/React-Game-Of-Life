@@ -1,4 +1,5 @@
 import React from 'react';
+import {GolBoard} from "./board";
 
 type AppProps = {
 
@@ -12,7 +13,9 @@ class App extends React.Component<AppProps, AppState>{
 
     render() {
         return (
-            <p>test wut wut</p>
+            <div id={"app"}>
+                <GolBoard width={400} height={400} cellSize={10}/>
+            </div>
         );
     }
 }
