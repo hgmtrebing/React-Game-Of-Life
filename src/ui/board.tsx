@@ -41,6 +41,8 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
             tick: 0,
             cells: cells
         }
+
+        this.onClick = this.onClick.bind(this);
     }
 
     update() {
@@ -61,7 +63,15 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
                 let xCellStart = x * this.props.cellSize + ((1+x) * this.props.cellBorder);
                 let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
 
+                /*
                 if ( (x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) {
+                    context.fillStyle = 'rgb(200, 0, 0)';
+                } else {
+                    context.fillStyle = 'rgb(0, 0, 200)';
+                }
+                 */
+
+                if (this.state.cells[x][y].isLiving) {
                     context.fillStyle = 'rgb(200, 0, 0)';
                 } else {
                     context.fillStyle = 'rgb(0, 0, 200)';
@@ -73,7 +83,33 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
 
     }
 
+    onClick(event: any) {
+        let xLocation = event.nativeEvent.offsetX;
+        let yLocation = event.nativeEvent.offsetY;
+
+        let cellSize = this.props.cellSize + this.props.cellBorder;
+
+        let column = Math.floor(xLocation / cellSize);
+        let row = Math.floor(yLocation / cellSize);
+
+        if (xLocation % cellSize < this.props.cellBorder || yLocation % cellSize < this.props.cellBorder) {
+            return;
+        }
+
+        let cells = this.state.cells;
+        let tick = this.state.tick;
+        cells[column][row].isLiving = !cells[column][row].isLiving;
+        this.setState({
+            cells: cells,
+            tick: tick
+        })
+    }
+
     componentDidMount() {
+        this.update();
+    }
+
+    componentDidUpdate(prevProps: Readonly<GolBoardProps>, prevState: Readonly<GolBoardState>, snapshot?: any) {
         this.update();
     }
 
@@ -82,7 +118,7 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
         var height = (this.props.height * this.props.cellSize) + ((1 +this.props.height) * this.props.cellBorder);
         return (
             <div id={"gol-board"}>
-                <canvas ref={this.canvasRef} width={width} height={height}>
+                <canvas onClick={this.onClick} ref={this.canvasRef} width={width} height={height}>
 
                 </canvas>
             </div>
