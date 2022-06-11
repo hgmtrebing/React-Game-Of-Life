@@ -1,23 +1,23 @@
 import React, {RefObject, useEffect} from 'react';
 import ReactDOM from 'react-dom';
+import {GolCell} from "./app";
 
 export type GolBoardProps = {
     width: number;
     height: number;
     cellSize: number;
     cellBorder: number;
+    cellToggler: CellToggler;
+    cellsToUpdate: Set<GolCell>;
 }
 
 export type GolBoardState = {
-    tick: number;
-    cells: Array<Array<GolCell>>;
 }
 
-export type GolCell = {
-    x: number;
-    y: number;
-    isLiving: boolean;
+type CellToggler = {
+    (x: number, y: number): void;
 }
+
 
 export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     canvasRef : RefObject<any>;
@@ -25,61 +25,47 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     constructor(props: GolBoardProps) {
         super(props);
         this.canvasRef = React.createRef();
-        let cells = [];
-        for (var x = 0; x < this.props.width; x++) {
-            cells.push([]);
-            for (var y = 0; y < this.props.width; y++) {
-                cells[x].push({
-                    x: x,
-                    y: y,
-                    isLiving: false
-                });
-            }
-        }
-
-        this.state = {
-            tick: 0,
-            cells: cells
-        }
 
         this.onClick = this.onClick.bind(this);
     }
 
     update() {
-        var canvas = this.canvasRef.current;
-        const context = canvas.getContext('2d')
-        //Our first draw
-        context.fillStyle = '#000000'
-        context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-        this.drawCells();
+        const context = this.getContext();
+        this.drawBackground(context);
+        this.drawCells(context);
     }
 
-    drawCells() {
-        var canvas = this.canvasRef.current;
-        const context = canvas.getContext('2d')
+    getContext() {
+        const canvas = this.canvasRef.current;
+        return canvas.getContext('2d');
+    }
 
-        for (var x = 0; x < this.state.cells.length; x++) {
-            for (var y = 0; y < this.state.cells[x].length; y++) {
-                let xCellStart = x * this.props.cellSize + ((1+x) * this.props.cellBorder);
-                let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
+    drawBackground(context) {
+        context.fillStyle = '#000000'
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+    }
 
-                /*
-                if ( (x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) {
-                    context.fillStyle = 'rgb(200, 0, 0)';
-                } else {
-                    context.fillStyle = 'rgb(0, 0, 200)';
-                }
-                 */
+    drawCells(context) {
+        this.props.cellsToUpdate.forEach((cell) => {
+            this.drawCell(cell, context);
+        });
+    }
 
-                if (this.state.cells[x][y].isLiving) {
-                    context.fillStyle = 'rgb(200, 0, 0)';
-                } else {
-                    context.fillStyle = 'rgb(0, 0, 200)';
-                }
+    drawCell(cell: GolCell, context: any) {
+        let x: number = cell.x;
+        let y: number = cell.y;
 
-                context.fillRect(xCellStart, yCellStart, this.props.cellSize, this.props.cellSize);
-            }
+        let xCellStart = x * this.props.cellSize + ((1+x) * this.props.cellBorder);
+        let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
+
+
+        if (cell.isLiving) {
+            context.fillStyle = 'rgb(200, 0, 0)';
+        } else {
+            context.fillStyle = 'rgb(0, 0, 200)';
         }
+
+        context.fillRect(xCellStart, yCellStart, this.props.cellSize, this.props.cellSize);
     }
 
     onClick(event: any) {
@@ -95,13 +81,7 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
             return;
         }
 
-        let cells = this.state.cells;
-        let tick = this.state.tick;
-        cells[column][row].isLiving = !cells[column][row].isLiving;
-        this.setState({
-            cells: cells,
-            tick: tick
-        })
+        this.props.cellToggler(column, row);
     }
 
     componentDidMount() {
