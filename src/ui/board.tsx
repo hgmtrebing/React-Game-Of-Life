@@ -80,7 +80,6 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
                 context.fillRect(xCellStart, yCellStart, this.props.cellSize, this.props.cellSize);
             }
         }
-
     }
 
     onClick(event: any) {

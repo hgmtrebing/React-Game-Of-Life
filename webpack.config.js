@@ -23,6 +23,12 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+
+            /* Necessary to import CSS Files (i.e. Bootstrap CSS) within JS/TS Code*/
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
         ]
     },
     resolve: {
