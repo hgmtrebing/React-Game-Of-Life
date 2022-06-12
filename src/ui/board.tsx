@@ -8,7 +8,7 @@ export type GolBoardProps = {
     cellSize: number;
     cellBorder: number;
     cellToggler: CellToggler;
-    cellsToUpdate: Set<GolCell>;
+    board: Array<Array<GolCell>>;
 }
 
 export type GolBoardState = {
@@ -46,14 +46,16 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     }
 
     drawCells(context) {
-        this.props.cellsToUpdate.forEach((cell) => {
-            this.drawCell(cell, context);
+        this.props.board.forEach((row: Array<GolCell>) => {
+            row.forEach((cell: GolCell) => {
+                this.drawCell(cell, context);
+            });
         });
     }
 
     drawCell(cell: GolCell, context: any) {
-        let x: number = cell.x;
-        let y: number = cell.y;
+        let x: number = cell.coord.x;
+        let y: number = cell.coord.y;
 
         let xCellStart = x * this.props.cellSize + ((1+x) * this.props.cellBorder);
         let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
