@@ -1,6 +1,7 @@
 import React from 'react';
 import {Toolbar} from "./toolbar";
 import {GolBoard} from "./board";
+import Container from 'react-bootstrap/Container';
 
 type AppProps = {
 
@@ -34,23 +35,26 @@ class App extends React.Component<AppProps, AppState>{
             tick: 0,
             cellSize: 20,
             cellBorder: 2,
-            widthInCells: 5,
-            heightInCells: 5,
+            widthInCells: 25,
+            heightInCells: 25,
             board: new Array<Array<GolCell>>(),
         };
 
         this.tickIncrementer = this.tickIncrementer.bind(this);
         this.initializeBoard = this.initializeBoard.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
+        this.resetBoard = this.resetBoard.bind(this);
 
         this.initializeBoard(false);
     }
 
     render() {
         return (
-            <div id={"app"}>
+            <Container id={"app"}>
 
-                <Toolbar currentTick={this.state.tick} incrementTick={this.tickIncrementer}/>
+                <Toolbar currentTick={this.state.tick}
+                         incrementTick={this.tickIncrementer}
+                         resetBoard={this.resetBoard}/>
 
                 <GolBoard width={this.state.widthInCells}
                           height={this.state.heightInCells}
@@ -60,7 +64,7 @@ class App extends React.Component<AppProps, AppState>{
                           board={this.state.board}
                 />
 
-            </div>
+            </Container>
         );
     }
 
@@ -84,6 +88,10 @@ class App extends React.Component<AppProps, AppState>{
         });
 
         this.setState(newState);
+    }
+
+    resetBoard() {
+        this.initializeBoard(true);
     }
 
 

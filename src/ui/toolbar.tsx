@@ -7,10 +7,11 @@ import Col from 'react-bootstrap/Col';
 
 type ToolbarProps = {
     currentTick: number;
-    incrementTick: TickIncrementer;
+    incrementTick: NoArgsVoidHandler;
+    resetBoard: NoArgsVoidHandler;
 }
 
-type TickIncrementer = {
+type NoArgsVoidHandler = {
     ():void;
 }
 
@@ -24,7 +25,7 @@ export class Toolbar extends React.Component<ToolbarProps, any> {
         return (
             <Container id={"gol-toolbar"}>
                 <Button onClick={this.props.incrementTick} id={"increment-tick"} variant={"success"}>Increment 1 Tick</Button>
-                <Button id={"decrement-tick"} variant={"danger"}>Decrement 1 Tick</Button>
+                <Button onClick={this.props.resetBoard} id={"reset-board"} variant={"danger"}>Reset Board</Button>
                 {this.props.currentTick}
             </Container>
         );

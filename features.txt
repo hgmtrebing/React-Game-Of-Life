@@ -1,0 +1,49 @@
+
+Settings:
+    - Create Settings Icon
+    - Create Settings Modal
+
+Colors:
+    - Background Color Picker
+    - Live Cell Color Picker
+    - Dead Cell Color Picker
+    - Generational Color Changer
+    - Iterations Dead Color Changer
+    - Number of Times Alive Color Changer
+
+Sizing:
+    - Specify Horizontal Size
+    - Specify Vertical Size
+    - Specify Cell Size
+    - Specify Cell Border
+
+Board Wrapping:
+    - Wrap Horizontally
+    - Wrap Vertically
+
+Autoplay:
+    - Autoplay Button
+    - Reverse Autoplay Button
+
+Reset Board Button
+
+History:
+    - Preserve History
+    - Implement Decrement by One Button
+    - Implement Autoplay Backwards Button
+
+Templates:
+    - Add Pattern Templates (Patterns Library)
+    - Pattern Dragger-Inserter
+
+Formatting:
+    - Clean up alignment and styling
+    - Add Icons
+
+Docker
+
+Electron
+
+Command Line Interface:
+    - Set Port Number
+    - Set Starting Parameters?
