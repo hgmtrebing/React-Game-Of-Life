@@ -1,18 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
+import {NoArgsVoidHandler} from "./types";
 
 type ToolbarProps = {
     currentTick: number;
     incrementTick: NoArgsVoidHandler;
     resetBoard: NoArgsVoidHandler;
-}
-
-type NoArgsVoidHandler = {
-    ():void;
+    showSettingsModal: NoArgsVoidHandler;
 }
 
 export class Toolbar extends React.Component<ToolbarProps, any> {
@@ -26,6 +21,7 @@ export class Toolbar extends React.Component<ToolbarProps, any> {
             <Container id={"gol-toolbar"}>
                 <Button onClick={this.props.incrementTick} id={"increment-tick"} variant={"success"}>Increment 1 Tick</Button>
                 <Button onClick={this.props.resetBoard} id={"reset-board"} variant={"danger"}>Reset Board</Button>
+                <Button onClick={this.props.showSettingsModal} id={"settings"}>Settings</Button>
                 {this.props.currentTick}
             </Container>
         );

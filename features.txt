@@ -36,9 +36,12 @@ Templates:
     - Add Pattern Templates (Patterns Library)
     - Pattern Dragger-Inserter
 
+Information Icon
+
 Formatting:
     - Clean up alignment and styling
     - Add Icons
+    - Add Title
 
 Docker
 

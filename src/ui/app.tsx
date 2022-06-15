@@ -2,6 +2,7 @@ import React from 'react';
 import {Toolbar} from "./toolbar";
 import {GolBoard} from "./board";
 import Container from 'react-bootstrap/Container';
+import {SettingsModal} from "./settings-modal";
 
 type AppProps = {
 
@@ -14,6 +15,7 @@ type AppState = {
     widthInCells: number;
     heightInCells: number;
     board: Array<Array<GolCell>>;
+    showSettingsModal: boolean;
 }
 
 export type GolCell = {
@@ -38,12 +40,15 @@ class App extends React.Component<AppProps, AppState>{
             widthInCells: 25,
             heightInCells: 25,
             board: new Array<Array<GolCell>>(),
+            showSettingsModal: false
         };
 
         this.tickIncrementer = this.tickIncrementer.bind(this);
         this.initializeBoard = this.initializeBoard.bind(this);
         this.toggleCell = this.toggleCell.bind(this);
         this.resetBoard = this.resetBoard.bind(this);
+        this.showSettingsModal = this.showSettingsModal.bind(this);
+        this.hideSettingsModal = this.hideSettingsModal.bind(this);
 
         this.initializeBoard(false);
     }
@@ -54,7 +59,9 @@ class App extends React.Component<AppProps, AppState>{
 
                 <Toolbar currentTick={this.state.tick}
                          incrementTick={this.tickIncrementer}
-                         resetBoard={this.resetBoard}/>
+                         resetBoard={this.resetBoard}
+                         showSettingsModal={this.showSettingsModal}
+                />
 
                 <GolBoard width={this.state.widthInCells}
                           height={this.state.heightInCells}
@@ -63,6 +70,8 @@ class App extends React.Component<AppProps, AppState>{
                           cellToggler={this.toggleCell}
                           board={this.state.board}
                 />
+
+                <SettingsModal showModal={this.state.showSettingsModal} hideSettingsModal={this.hideSettingsModal}/>
 
             </Container>
         );
@@ -207,6 +216,18 @@ class App extends React.Component<AppProps, AppState>{
 
 
         return neighbors;
+    }
+
+    showSettingsModal() {
+        let newState: AppState = this.state;
+        newState.showSettingsModal = true;
+        this.setState(newState);
+    }
+
+    hideSettingsModal() {
+        let newState: AppState = this.state;
+        newState.showSettingsModal = false;
+        this.setState(newState);
     }
 }
 
