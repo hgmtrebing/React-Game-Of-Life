@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
 import {NoArgsVoidHandler} from "./types";
+import Compact from 'react-color';
 
 type SettingsModalProps = {
     showModal: boolean,
@@ -27,6 +28,7 @@ export class SettingsModal extends React.Component<SettingsModalProps, SettingsM
                 <Modal.Header closeButton={true}>
                     <Modal.Title>Game of Life Settings</Modal.Title>
                 </Modal.Header>
+                <Compact/>
 
             </Modal>
         );

@@ -3,6 +3,8 @@ import {Toolbar} from "./toolbar";
 import {GolBoard} from "./board";
 import Container from 'react-bootstrap/Container';
 import {SettingsModal} from "./settings-modal";
+import {ColorPicker} from "./settings/color-picker";
+import {Color} from "./types";
 
 type AppProps = {
 
@@ -16,6 +18,9 @@ type AppState = {
     heightInCells: number;
     board: Array<Array<GolCell>>;
     showSettingsModal: boolean;
+    backgroundColor: Color;
+    liveCellColor: Color;
+    deadCellColor: Color;
 }
 
 export type GolCell = {
@@ -40,7 +45,28 @@ class App extends React.Component<AppProps, AppState>{
             widthInCells: 25,
             heightInCells: 25,
             board: new Array<Array<GolCell>>(),
-            showSettingsModal: false
+            showSettingsModal: false,
+
+            backgroundColor: {
+                r: "0",
+                g: "0",
+                b: "0",
+                a: "1"
+            },
+
+            liveCellColor: {
+                r: "255",
+                g: "0",
+                b: "0",
+                a: "1"
+            },
+
+            deadCellColor: {
+                r: "0",
+                g: "0",
+                b: "255",
+                a: "1"
+            }
         };
 
         this.tickIncrementer = this.tickIncrementer.bind(this);
@@ -49,6 +75,9 @@ class App extends React.Component<AppProps, AppState>{
         this.resetBoard = this.resetBoard.bind(this);
         this.showSettingsModal = this.showSettingsModal.bind(this);
         this.hideSettingsModal = this.hideSettingsModal.bind(this);
+        this.setBackgroundColor = this.setBackgroundColor.bind(this);
+        this.setDeadCellColor = this.setDeadCellColor.bind(this);
+        this.setLiveCellColor = this.setLiveCellColor.bind(this);
 
         this.initializeBoard(false);
     }
@@ -57,6 +86,9 @@ class App extends React.Component<AppProps, AppState>{
         return (
             <Container id={"app"}>
 
+                <ColorPicker colorSetter={this.setBackgroundColor}/>
+                <ColorPicker colorSetter={this.setLiveCellColor}/>
+                <ColorPicker colorSetter={this.setDeadCellColor}/>
                 <Toolbar currentTick={this.state.tick}
                          incrementTick={this.tickIncrementer}
                          resetBoard={this.resetBoard}
@@ -69,6 +101,9 @@ class App extends React.Component<AppProps, AppState>{
                           cellBorder={this.state.cellBorder}
                           cellToggler={this.toggleCell}
                           board={this.state.board}
+                          backgroundColor={this.state.backgroundColor}
+                          liveCellColor={this.state.liveCellColor}
+                          deadCellColor={this.state.deadCellColor}
                 />
 
                 <SettingsModal showModal={this.state.showSettingsModal} hideSettingsModal={this.hideSettingsModal}/>
@@ -227,6 +262,24 @@ class App extends React.Component<AppProps, AppState>{
     hideSettingsModal() {
         let newState: AppState = this.state;
         newState.showSettingsModal = false;
+        this.setState(newState);
+    }
+
+    setBackgroundColor(color: Color) {
+        let newState: AppState = this.state;
+        newState.backgroundColor = color;
+        this.setState(newState);
+    }
+
+    setLiveCellColor(color: Color) {
+        let newState: AppState = this.state;
+        newState.liveCellColor = color;
+        this.setState(newState);
+    }
+
+    setDeadCellColor(color: Color) {
+        let newState: AppState = this.state;
+        newState.deadCellColor = color;
         this.setState(newState);
     }
 }

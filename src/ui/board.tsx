@@ -1,6 +1,7 @@
 import React, {RefObject, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {GolCell} from "./app";
+import {Color} from "./types";
 
 export type GolBoardProps = {
     width: number;
@@ -9,6 +10,9 @@ export type GolBoardProps = {
     cellBorder: number;
     cellToggler: CellToggler;
     board: Array<Array<GolCell>>;
+    backgroundColor: Color;
+    liveCellColor: Color;
+    deadCellColor: Color;
 }
 
 export type GolBoardState = {
@@ -41,7 +45,11 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     }
 
     drawBackground(context) {
-        context.fillStyle = '#000000'
+        let r = this.props.backgroundColor.r;
+        let g = this.props.backgroundColor.g;
+        let b = this.props.backgroundColor.b;
+        let a = this.props.backgroundColor.a;
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`
         context.fillRect(0, 0, context.canvas.width, context.canvas.height)
     }
 
@@ -61,12 +69,19 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
         let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
 
 
-        if (cell.isLiving) {
-            context.fillStyle = 'rgb(200, 0, 0)';
-        } else {
-            context.fillStyle = 'rgb(0, 0, 200)';
+        let r = this.props.liveCellColor.r;
+        let g = this.props.liveCellColor.g;
+        let b = this.props.liveCellColor.b;
+        let a = this.props.liveCellColor.a;
+
+        if (!cell.isLiving) {
+            r = this.props.deadCellColor.r;
+            g = this.props.deadCellColor.g;
+            b = this.props.deadCellColor.b;
+            a = this.props.deadCellColor.a;
         }
 
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`
         context.fillRect(xCellStart, yCellStart, this.props.cellSize, this.props.cellSize);
     }
 
