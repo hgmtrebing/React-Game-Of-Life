@@ -1,18 +1,12 @@
 import React, {RefObject, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {GolCell} from "./app";
-import {Color} from "./types";
+import {BoardSettings, Color} from "./types";
 
 export type GolBoardProps = {
-    width: number;
-    height: number;
-    cellSize: number;
-    cellBorder: number;
     cellToggler: CellToggler;
     board: Array<Array<GolCell>>;
-    backgroundColor: Color;
-    liveCellColor: Color;
-    deadCellColor: Color;
+    boardSettings: BoardSettings;
 }
 
 export type GolBoardState = {
@@ -45,11 +39,7 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     }
 
     drawBackground(context) {
-        let r = this.props.backgroundColor.r;
-        let g = this.props.backgroundColor.g;
-        let b = this.props.backgroundColor.b;
-        let a = this.props.backgroundColor.a;
-        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`
+        context.fillStyle = `${this.props.boardSettings.borderColor}`
         context.fillRect(0, 0, context.canvas.width, context.canvas.height)
     }
 
@@ -65,36 +55,30 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
         let x: number = cell.coord.x;
         let y: number = cell.coord.y;
 
-        let xCellStart = x * this.props.cellSize + ((1+x) * this.props.cellBorder);
-        let yCellStart = y * this.props.cellSize + ((1+y) * this.props.cellBorder);
+        let xCellStart = x * this.props.boardSettings.cellSize + ((1+x) * this.props.boardSettings.cellBorderSize);
+        let yCellStart = y * this.props.boardSettings.cellSize + ((1+y) * this.props.boardSettings.cellBorderSize);
 
 
-        let r = this.props.liveCellColor.r;
-        let g = this.props.liveCellColor.g;
-        let b = this.props.liveCellColor.b;
-        let a = this.props.liveCellColor.a;
 
         if (!cell.isLiving) {
-            r = this.props.deadCellColor.r;
-            g = this.props.deadCellColor.g;
-            b = this.props.deadCellColor.b;
-            a = this.props.deadCellColor.a;
+            context.fillStyle = `${this.props.boardSettings.deadCellColor}`
+        } else {
+            context.fillStyle = `${this.props.boardSettings.liveCellColor}`
         }
 
-        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`
-        context.fillRect(xCellStart, yCellStart, this.props.cellSize, this.props.cellSize);
+        context.fillRect(xCellStart, yCellStart, this.props.boardSettings.cellSize, this.props.boardSettings.cellSize);
     }
 
     onClick(event: any) {
         let xLocation = event.nativeEvent.offsetX;
         let yLocation = event.nativeEvent.offsetY;
 
-        let cellSize = this.props.cellSize + this.props.cellBorder;
+        let cellSize = this.props.boardSettings.cellSize + this.props.boardSettings.cellBorderSize;
 
         let column = Math.floor(xLocation / cellSize);
         let row = Math.floor(yLocation / cellSize);
 
-        if (xLocation % cellSize < this.props.cellBorder || yLocation % cellSize < this.props.cellBorder) {
+        if (xLocation % cellSize < this.props.boardSettings.cellBorderSize || yLocation % cellSize < this.props.boardSettings.cellBorderSize) {
             return;
         }
 
@@ -110,8 +94,9 @@ export class GolBoard extends React.Component<GolBoardProps, GolBoardState> {
     }
 
     render() {
-        var width = (this.props.width * this.props.cellSize) + ((1 +this.props.width) * this.props.cellBorder);
-        var height = (this.props.height * this.props.cellSize) + ((1 +this.props.height) * this.props.cellBorder);
+        var settings: BoardSettings = this.props.boardSettings;
+        var width = (settings.boardWidth * settings.cellSize) + ((1 +settings.boardWidth) * settings.cellBorderSize);
+        var height = (settings.boardHeight * settings.cellSize) + ((1 +settings.boardHeight) * settings.cellBorderSize);
         return (
             <div id={"gol-board"}>
                 <canvas onClick={this.onClick} ref={this.canvasRef} width={width} height={height}>

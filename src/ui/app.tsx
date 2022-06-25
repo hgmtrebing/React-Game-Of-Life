@@ -4,7 +4,7 @@ import {GolBoard} from "./board";
 import Container from 'react-bootstrap/Container';
 import {SettingsModal} from "./settings-modal";
 import {ColorPicker} from "./settings/color-picker";
-import {Color} from "./types";
+import {Color, BoardSettings} from "./types";
 
 type AppProps = {
 
@@ -12,15 +12,9 @@ type AppProps = {
 
 type AppState = {
     tick: number;
-    cellSize: number;
-    cellBorder: number;
-    widthInCells: number;
-    heightInCells: number;
     board: Array<Array<GolCell>>;
     showSettingsModal: boolean;
-    backgroundColor: Color;
-    liveCellColor: Color;
-    deadCellColor: Color;
+    boardSettings: BoardSettings;
 }
 
 export type GolCell = {
@@ -40,34 +34,18 @@ class App extends React.Component<AppProps, AppState>{
 
         this.state = {
             tick: 0,
-            cellSize: 20,
-            cellBorder: 2,
-            widthInCells: 25,
-            heightInCells: 25,
+            boardSettings: {
+                cellSize: 20,
+                cellBorderSize: 2,
+                boardWidth: 25,
+                boardHeight: 25,
+                borderColor: "#000000",
+                liveCellColor: "#FF0000",
+                deadCellColor: "#0000FF"
+            },
             board: new Array<Array<GolCell>>(),
             showSettingsModal: false,
-
-            backgroundColor: {
-                r: "0",
-                g: "0",
-                b: "0",
-                a: "1"
-            },
-
-            liveCellColor: {
-                r: "255",
-                g: "0",
-                b: "0",
-                a: "1"
-            },
-
-            deadCellColor: {
-                r: "0",
-                g: "0",
-                b: "255",
-                a: "1"
-            }
-        };
+        }
 
         this.tickIncrementer = this.tickIncrementer.bind(this);
         this.initializeBoard = this.initializeBoard.bind(this);
@@ -75,9 +53,7 @@ class App extends React.Component<AppProps, AppState>{
         this.resetBoard = this.resetBoard.bind(this);
         this.showSettingsModal = this.showSettingsModal.bind(this);
         this.hideSettingsModal = this.hideSettingsModal.bind(this);
-        this.setBackgroundColor = this.setBackgroundColor.bind(this);
-        this.setDeadCellColor = this.setDeadCellColor.bind(this);
-        this.setLiveCellColor = this.setLiveCellColor.bind(this);
+        this.saveSettings = this.saveSettings.bind(this);
 
         this.initializeBoard(false);
     }
@@ -86,27 +62,21 @@ class App extends React.Component<AppProps, AppState>{
         return (
             <Container id={"app"}>
 
-                <ColorPicker colorSetter={this.setBackgroundColor}/>
-                <ColorPicker colorSetter={this.setLiveCellColor}/>
-                <ColorPicker colorSetter={this.setDeadCellColor}/>
                 <Toolbar currentTick={this.state.tick}
                          incrementTick={this.tickIncrementer}
                          resetBoard={this.resetBoard}
                          showSettingsModal={this.showSettingsModal}
                 />
 
-                <GolBoard width={this.state.widthInCells}
-                          height={this.state.heightInCells}
-                          cellSize={this.state.cellSize}
-                          cellBorder={this.state.cellBorder}
-                          cellToggler={this.toggleCell}
+                <GolBoard cellToggler={this.toggleCell}
                           board={this.state.board}
-                          backgroundColor={this.state.backgroundColor}
-                          liveCellColor={this.state.liveCellColor}
-                          deadCellColor={this.state.deadCellColor}
+                          boardSettings={this.state.boardSettings}
                 />
 
-                <SettingsModal showModal={this.state.showSettingsModal} hideSettingsModal={this.hideSettingsModal}/>
+                <SettingsModal showModal={this.state.showSettingsModal}
+                               hideSettingsModal={this.hideSettingsModal}
+                               saveSettings={this.saveSettings}
+                               initialSettings={this.state.boardSettings}/>
 
             </Container>
         );
@@ -117,7 +87,7 @@ class App extends React.Component<AppProps, AppState>{
         newState.tick++;
 
         let oldBoard: Array<Array<GolCell>> = this.state.board;
-        newState.board = this.createBoard(newState.widthInCells, newState.heightInCells);
+        newState.board = this.createBoard(newState.boardSettings.boardWidth, newState.boardSettings.boardHeight);
 
         oldBoard.forEach((row : Array<GolCell>) => {
             row.forEach((cell: GolCell) => {
@@ -142,7 +112,7 @@ class App extends React.Component<AppProps, AppState>{
     initializeBoard(componentMounted: boolean) {
         let newState: AppState = this.state;
 
-        newState.board = this.createBoard(newState.widthInCells, newState.heightInCells);
+        newState.board = this.createBoard(newState.boardSettings.boardWidth, newState.boardSettings.boardHeight);
 
         if (componentMounted) {
             this.setState(newState);
@@ -213,9 +183,9 @@ class App extends React.Component<AppProps, AppState>{
         let neighbors : Set<GolCellCoordinates> = new Set<GolCellCoordinates>();
 
         if (location.x >= 0 &&
-            location.x < this.state.widthInCells &&
+            location.x < this.state.boardSettings.boardWidth &&
             location.y >= 0 &&
-            location.y < this.state.heightInCells) {
+            location.y < this.state.boardSettings.boardHeight) {
 
             let rowsToUpdate: Array<number> = [location.y];
             let colsToUpdate: Array<number> = [location.x];
@@ -224,7 +194,7 @@ class App extends React.Component<AppProps, AppState>{
                 colsToUpdate.push(location.x-1);
             }
 
-            if (location.x < this.state.widthInCells-1) {
+            if (location.x < this.state.boardSettings.boardWidth-1) {
                 colsToUpdate.push(location.x+1);
             }
 
@@ -232,7 +202,7 @@ class App extends React.Component<AppProps, AppState>{
                 rowsToUpdate.push(location.y-1);
             }
 
-            if (location.y < this.state.heightInCells-1) {
+            if (location.y < this.state.boardSettings.boardHeight-1) {
                 rowsToUpdate.push(location.y+1);
             }
 
@@ -265,21 +235,13 @@ class App extends React.Component<AppProps, AppState>{
         this.setState(newState);
     }
 
-    setBackgroundColor(color: Color) {
-        let newState: AppState = this.state;
-        newState.backgroundColor = color;
-        this.setState(newState);
-    }
+    // TODO - Remove
+    /*
+     */
 
-    setLiveCellColor(color: Color) {
+    saveSettings(boardSettings: BoardSettings) {
         let newState: AppState = this.state;
-        newState.liveCellColor = color;
-        this.setState(newState);
-    }
-
-    setDeadCellColor(color: Color) {
-        let newState: AppState = this.state;
-        newState.deadCellColor = color;
+        newState.boardSettings = boardSettings;
         this.setState(newState);
     }
 }
