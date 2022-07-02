@@ -23,17 +23,21 @@ export class SettingsModal extends React.Component<SettingsModalProps, SettingsM
         super(props);
 
         this.state = {
-            currentSettings: this.props.initialSettings
+            currentSettings: JSON.parse(JSON.stringify(this.props.initialSettings))
         }
 
         this.setBackgroundColor = this.setBackgroundColor.bind(this);
         this.setDeadCellColor = this.setDeadCellColor.bind(this);
         this.setLiveCellColor = this.setLiveCellColor.bind(this);
+        this.setCellBorderSize = this.setCellBorderSize.bind(this);
+        this.setCellSize = this.setCellSize.bind(this);
+        this.setBoardWidth = this.setBoardWidth.bind(this);
+        this.setBoardHeight = this.setBoardHeight.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     render() {
-        let settings : BoardSettings = this.props.initialSettings;
+        let settings : BoardSettings = this.state.currentSettings;
         return (
             <Modal show={this.props.showModal} onHide={this.props.hideSettingsModal}>
                 <Modal.Header closeButton={true}>
@@ -59,22 +63,22 @@ export class SettingsModal extends React.Component<SettingsModalProps, SettingsM
 
                         <Form.Group as={Row}>
                             <Col> <Form.Label>Cell Border Size</Form.Label> </Col>
-                            <Col> <Form.Range min={0} max={10} step={1}/> </Col>
+                            <Col> <Form.Range onChange={this.setCellBorderSize} value={settings.cellBorderSize} min={0} max={10} step={1}/> </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Col> <Form.Label>Cell Size</Form.Label> </Col>
-                            <Col> <Form.Range min={10} max={50} step={1}/> </Col>
+                            <Col> <Form.Range onChange={this.setCellSize} value={settings.cellSize} min={10} max={50} step={1}/> </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Col> <Form.Label>Board Width</Form.Label> </Col>
-                            <Col> <Form.Range min={5} max={500} step={5}/> </Col>
+                            <Col> <Form.Range onChange={this.setBoardWidth} value={settings.boardWidth} min={5} max={500} step={5}/> </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Col> <Form.Label>Board Height</Form.Label> </Col>
-                            <Col> <Form.Range min={5} max={500} step={5}/> </Col>
+                            <Col> <Form.Range onChange={this.setBoardHeight} value={settings.boardHeight} min={5} max={500} step={5}/> </Col>
                         </Form.Group>
 
                     </Form>
@@ -103,6 +107,30 @@ export class SettingsModal extends React.Component<SettingsModalProps, SettingsM
     setDeadCellColor(event) {
         let newState: SettingsModalState = this.state;
         newState.currentSettings.deadCellColor = event.target.value;
+        this.setState(newState);
+    }
+
+    setCellBorderSize(event) {
+        let newState: SettingsModalState = this.state;
+        newState.currentSettings.cellBorderSize = parseInt(event.target.value);
+        this.setState(newState);
+    }
+
+    setCellSize(event) {
+        let newState: SettingsModalState = this.state;
+        newState.currentSettings.cellSize = parseInt(event.target.value);
+        this.setState(newState);
+    }
+
+    setBoardWidth(event) {
+        let newState: SettingsModalState = this.state;
+        newState.currentSettings.boardWidth = parseInt(event.target.value);
+        this.setState(newState);
+    }
+
+    setBoardHeight(event) {
+        let newState: SettingsModalState = this.state;
+        newState.currentSettings.boardHeight = parseInt(event.target.value);
         this.setState(newState);
     }
 

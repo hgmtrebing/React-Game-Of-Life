@@ -235,14 +235,15 @@ class App extends React.Component<AppProps, AppState>{
         this.setState(newState);
     }
 
-    // TODO - Remove
-    /*
-     */
-
     saveSettings(boardSettings: BoardSettings) {
         let newState: AppState = this.state;
+        let oldBoard : BoardSettings = JSON.parse(JSON.stringify(this.state.boardSettings));
         newState.boardSettings = boardSettings;
         this.setState(newState);
+        if (oldBoard.boardHeight !== boardSettings.boardHeight ||
+            oldBoard.boardWidth !== boardSettings.boardWidth) {
+            this.resetBoard();
+        }
     }
 }
 
