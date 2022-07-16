@@ -18,5 +18,5 @@ function runServer(port: number) {
     });
 }
 
-runServer(3000);
+runServer(80);
 
