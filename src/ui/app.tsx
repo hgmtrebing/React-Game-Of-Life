@@ -70,13 +70,19 @@ class App extends React.Component<AppProps, AppState>{
         );
     }
 
+    /**
+     * Increments the state of the Game of Life board by a single tick, recomputing the state of all the GolCells
+     * in the process. This is the central method for advancing the state of the Game of Life Board.
+     */
     tickIncrementer() {
         let newState: AppState = this.state;
         newState.tick++;
 
+        // Save off the Old Board, which will be used to track living/dead neighbors, and create a new board to populate with the results
         let oldBoard: Array<Array<GolCell>> = this.state.board;
         newState.board = this.createBoard(newState.boardSettings.boardWidth, newState.boardSettings.boardHeight);
 
+        // Iterate through all the GolCells, recomputing their state.
         oldBoard.forEach((row : Array<GolCell>) => {
             row.forEach((cell: GolCell) => {
                 if (cell.isLiving && (cell.livingNeighbors === 2 || cell.livingNeighbors === 3)) {
@@ -92,11 +98,17 @@ class App extends React.Component<AppProps, AppState>{
         this.setState(newState);
     }
 
+    /** Resets the Board, reinitializing all GolCells to their default (i.e. 'dead') state. */
     resetBoard() {
         this.initializeBoard(true);
     }
 
 
+    /**
+     * Creates an entirely new Board of GolCells and updates the internal state of the Application with the new board.
+     * Effectively resets the board if there was already an existing Board.
+     * @param componentMounted true if the component is expected to have already been mounted.
+     */
     initializeBoard(componentMounted: boolean) {
         let newState: AppState = this.state;
 
@@ -109,6 +121,12 @@ class App extends React.Component<AppProps, AppState>{
         }
     }
 
+    /**
+     * Creates a new Board of GolCells of a specified width and height. This method merely creates a board and returns
+     * it -- it does not modify the state of the Application.
+     * @param width the desired width (in cells) of the new Board.
+     * @param height the desired height (in cells) of the new Board.
+     */
     createBoard(width: number, height: number) : Array<Array<GolCell>> {
         let board : Array<Array<GolCell>> = new Array<Array<GolCell>>();
 
@@ -211,12 +229,14 @@ class App extends React.Component<AppProps, AppState>{
         return neighbors;
     }
 
+    /** Method called to indicate that the Settings Modal *should* be displayed. */
     showSettingsModal() {
         let newState: AppState = this.state;
         newState.showSettingsModal = true;
         this.setState(newState);
     }
 
+    /** Method called to indicate that the Settings Modal **should NOT** be displayed. */
     hideSettingsModal() {
         let newState: AppState = this.state;
         newState.showSettingsModal = false;
