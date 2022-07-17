@@ -1,11 +1,9 @@
+/** An Event Handler type that takes no arguments and returns no value. */
 export type NoArgsVoidHandler = {
     (): void;
 }
 
-export type ColorSetter = {
-    (color: Color): void;
-}
-
+/** A type encapsulating the settings of the Game of Live board that can be modified by the user. */
 export type BoardSettings = {
     borderColor: string,
     liveCellColor: string,
@@ -16,16 +14,9 @@ export type BoardSettings = {
     boardHeight: number
 }
 
+/** An Event Handler type that consumes a BoardSettings object and returns no value. */
 export type SaveSettingsHandler = {
     (boardSettings : BoardSettings) : void;
-}
-
-
-export type Color = {
-    r: string
-    g: string,
-    b: string,
-    a: string
 }
 
 /** Datatype that encapsulates a single Game of Life Cell, including its coordinates and its live/dead state. */
