@@ -7,9 +7,17 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 
 type SettingsModalProps = {
+
+    /** Whether to display or hide the Settings Modal. */
     showModal: boolean,
+
+    /** Event handler that is run whenever the user clicks on the 'Cancel' Button or the 'x' in the top right corner. */
     hideSettingsModal: NoArgsVoidHandler,
+
+    /** Event handler whenever the user indicates that they would like to save their changes for the settings. */
     saveSettings: SaveSettingsHandler,
+
+    /** The initial Board Settings when this Component is first constructed. */
     initialSettings: BoardSettings
 }
 
@@ -17,6 +25,7 @@ type SettingsModalState = {
     currentSettings: BoardSettings
 }
 
+/** Component controlling the Settings Modal, which pops up and allows the user to reconfigure certain aspects of the Game of Life. */
 export class SettingsModal extends React.Component<SettingsModalProps, SettingsModalState> {
 
     constructor(props) {

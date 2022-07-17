@@ -3,8 +3,7 @@ import {Toolbar} from "./toolbar";
 import {GolBoard} from "./board";
 import Container from 'react-bootstrap/Container';
 import {SettingsModal} from "./settings-modal";
-import {ColorPicker} from "./settings/color-picker";
-import {Color, BoardSettings} from "./types";
+import {BoardSettings, GolCell, GolCellCoordinates} from "./types";
 
 type AppProps = {
 
@@ -15,17 +14,6 @@ type AppState = {
     board: Array<Array<GolCell>>;
     showSettingsModal: boolean;
     boardSettings: BoardSettings;
-}
-
-export type GolCell = {
-    coord: GolCellCoordinates;
-    livingNeighbors: number;
-    isLiving: boolean;
-}
-
-export type GolCellCoordinates = {
-    x: number;
-    y: number;
 }
 
 class App extends React.Component<AppProps, AppState>{

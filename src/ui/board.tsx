@@ -1,7 +1,6 @@
 import React, {RefObject, useEffect} from 'react';
 import ReactDOM from 'react-dom';
-import {GolCell} from "./app";
-import {BoardSettings, Color} from "./types";
+import {BoardSettings, Color, GolCell} from "./types";
 
 export type GolBoardProps = {
     cellToggler: CellToggler;
